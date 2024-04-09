@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -98,12 +99,16 @@ func New(ctx context.Context, conf Config) *Server {
 }
 
 func (s *Server) Start() *http.Server {
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: true,
+	}
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", s.Config.Host, s.Config.Port),
 		Handler:      s.engine,
 		ReadTimeout:  300 * time.Second,
 		IdleTimeout:  300 * time.Second,
 		WriteTimeout: 30 * time.Second,
+		TLSConfig:    tlsConfig,
 	}
 
 	go func() {
