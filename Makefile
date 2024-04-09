@@ -1,5 +1,6 @@
 .PHONY: build
 build:
+	go mod vendor
 	go build -o dummy_server main.go
 
 .PHONY: grant_access_rights
